@@ -1,4 +1,4 @@
-# Research and Development (R&D) Health Check Project
+# Health Check Research and Development (R&D) Project
 
 This R&D proof-of-concept project explores the implementation of a standardized health check system tailored for Python-based applications. The goal is to design a reusable and generic framework that developers can integrate to monitor application status, performance, and service availability.
 
