@@ -24,3 +24,13 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 [📘 Follow the documented procedures for application usage and operation](howto/USAGE_OPERATION.md "Follow the documented procedures for application usage and operation")
 
+## FastAPI Routes
+
+## Libraries Used
+
+### FastAPI Application
+
+
+### HTML Demo Page
+
+### Pytest
