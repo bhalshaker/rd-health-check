@@ -16,6 +16,12 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 [📖 Core Features Description](howto/CORE_FEATURES.md "Core Features Description")
 
+## Proof of Concept Implementation
+
+### FastAPI Routes
+
+### HTML Demo
+
 ## 🚀 Deployment and Usage Procedures
 
 [🖥️ Deploy the application on a bare-metal or virtual server and perform testing](howto/BAREMETAL.md "Deploy the application on a bare-metal or virtual server and perform testing")
@@ -24,7 +30,7 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 [📘 Follow the documented procedures for application usage and operation](howto/USAGE_OPERATION.md "Follow the documented procedures for application usage and operation")
 
-## FastAPI Routes
+
 
 ## Libraries Used
 
