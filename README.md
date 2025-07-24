@@ -10,11 +10,17 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 - [ ] Implement diagnostic routine to verify TCP connectivity to external endpoints based on hostname or IP address and designated port.
 - [ ] Validate presence of all Python packages specified in the `requirements.txt` manifest.
-- [ ] Conduct availability checks for remote HTTP-based APIs, ensuring proper response status and latency bounds.
+- [ ] Conduct availability checks for remote HTTP-based APIs, ensuring availability of the service.
 - [ ] Establish connectivity verification for dependent relational database management systems (RDBMS), confirming authentication and schema accessibility.
 - [ ] Detect and confirm active mount status of filesystem targets essential to application runtime dependencies.
 
 [📖 Core Features Description](howto/CORE_FEATURES.md "Core Features Description")
+
+## Proof of Concept Implementation
+
+### FastAPI Routes
+
+### HTML Demo
 
 ## 🚀 Deployment and Usage Procedures
 
@@ -24,3 +30,29 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 [📘 Follow the documented procedures for application usage and operation](howto/USAGE_OPERATION.md "Follow the documented procedures for application usage and operation")
 
+
+## Run environemnt prerequists
+
+* 🐍 Python 3.11
+* 🐳 Docker/ 🦭 Podman (Recommended to automate testing, otherwise allocating databases should be done manually)
+
+## Libraries Used
+
+### Python Application
+
+* **FastAPI** -> Web framework for building APIs
+* **Uvicorn** -> Production ASGI Server to run the web APIS
+* **Pydantic** -> This library is for Json Body schemas using it would make validating json body and query parameters much easier
+* **python-dotenv** -> load external .env file
+
+### HTML Demo Page
+
+* **Tailwind**
+* **React**
+* **Babel**
+
+### Testing Libraries
+
+* **Pytest** -> Framework library to test the application
+* **pytest-html** -> Generate PyTest results in an HTML file
+* **Selenium**
