@@ -35,23 +35,33 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 * 🐍 Python 3.11
 * 🐳 Docker/ 🦭 Podman (Recommended to automate testing, otherwise allocating databases should be done manually)
 
-## Libraries Used
+## 📦 Libraries Used
 
-### Python Application
+### 🐍 Python Backend Application
 
-* **FastAPI** -> Web framework for building APIs
-* **Uvicorn** -> Production ASGI Server to run the web APIS
-* **Pydantic** -> This library is for Json Body schemas using it would make validating json body and query parameters much easier
-* **python-dotenv** -> load external .env file
+| Tool/Library       | Purpose                                                                 |
+|--------------------|-------------------------------------------------------------------------|
+| **FastAPI**         | Web framework for building RESTful APIs using Python type hints.        |
+| **Uvicorn**         | ASGI server for running FastAPI apps in production.                     |
+| **Pydantic**        | Data validation and parsing of JSON bodies and query parameters.        |
+| **python-dotenv**   | Loads environment variables from a `.env` file.                         |
+| **PyJWT** *(optional)* | Handles JWT encoding/decoding for authentication.                    |
 
-### HTML Demo Page
+### 🌐 Frontend (HTML Demo Page)
 
-* **Tailwind**
-* **React**
-* **Babel**
+| Tool/Library       | Purpose                                                                 |
+|--------------------|-------------------------------------------------------------------------|
+| **Tailwind CSS**    | Utility-first CSS framework for responsive design.                      |
+| **React**           | JavaScript library for building interactive UIs.                        |
+| **Babel**           | Transpiles modern JavaScript for browser compatibility.                 |
+| **fetch API**       | Native JavaScript method for making RESTful API calls to FastAPI.       |
 
-### Testing Libraries
+### 🧪 Testing & CI/CD
 
-* **Pytest** -> Framework library to test the application
-* **pytest-html** -> Generate PyTest results in an HTML file
-* **Selenium**
+| Tool/Library       | Purpose                                                                 |
+|--------------------|-------------------------------------------------------------------------|
+| **Pytest**          | Framework for writing and running tests.                                |
+| **pytest-html**     | Generates HTML reports from Pytest results.                             |
+| **Selenium**        | Automates browser-based UI testing.                                     |
+| **TestClient (FastAPI)** | Tests FastAPI routes without running a live server.               |
+| **GitHub Actions**  | Automates testing, linting, and deployment workflows.                   |
