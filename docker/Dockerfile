@@ -22,9 +22,6 @@ WORKDIR /home/uvicorn
 # Copy all project files to container images with correct ownership
 COPY --chown=uvicorn:uvicorn . .
 
-# Create venv for the project
-RUN python -m venv .venv 
-
 # Set Python environment variables:
 # - Add /home/uvicornto module search path
 # - Disable .pyc bytecode generation
