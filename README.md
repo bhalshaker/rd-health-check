@@ -56,7 +56,6 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 | **Uvicorn**         | ASGI server for running FastAPI apps in production.                     |
 | **Pydantic**        | Data validation and parsing of JSON bodies and query parameters.        |
 | **prometheus_client** | Exposes metrics for Prometheus monitoring and alerting.                |
-| **jsonschema** | Validates JSON data against a JSON Schema, which is a declarative way to describe the structure and constraints of JSON data. |
 
 ### 🌐 Frontend (HTML Demo Page)
 
