@@ -1,4 +1,5 @@
 import json
+import os
 
 def read_packages_requirements(requirements_file:str="requirements.txt") -> list[str]:
     """ Read the requirements.txt file and return a list of installed packages.
@@ -19,4 +20,16 @@ def load_health_check_json_schema(health_check_file:str="health_check_schema.jso
     # Read the health_check_schema.json file and return its content as a dictionary
     with open(health_check_file, 'r') as file:
         return json.load(file)  # Load the JSON content into a dictionary
+    
+def file_exists(file_path:str) -> bool:
+    """ Check if the specified file exists.
+
+    Args:
+        file_path (str): The path to the file to check.
+
+    Returns:
+        bool: True if the file exists, False otherwise.
+    """
+    # Check if the specified file exists
+    return os.path.isfile(file_path)
     
