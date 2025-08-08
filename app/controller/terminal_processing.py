@@ -37,19 +37,6 @@ def is_os_unix_list()->bool:
     # Check if the current os is a Unix based
     return os.name=='posix'
 
-def is_valid_mount_point(mount_point:str)->bool:
-    """ Check if the provided mount point has a valid Linux mount point syntax using regular expression.
-
-    Args:
-        mount_point (str): mount point to check if it is valid or not.
-
-    Returns:
-        bool: True if the mount point is valid, False otherwise.
-    """
-    # Regex pattern to match valid Linux mount points (absolute paths like /, /home, /mnt/data)
-    mount_point_pattern=r'^/(?:[\w.-]+/?)+'
-    # Return 
-    return re.match(mount_point_pattern,mount_point)
 
 def get_mount_point_usages(mount_point:str)->int:
     """ Get the usage percentage of the specified mount point by executing the 'df' command in the terminal.
