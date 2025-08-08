@@ -12,6 +12,26 @@ DB_DRIVER_MAP={
     "db2":["ibm_db"]
 }
 
+def is_config_template_checktype_valid(checkconfig:list[dict])->bool:
+    """ Verify if the check configuration template has the required keys.
+
+    Args:
+        checkconfig (list[dict]): The check configuration template to verify.
+
+    Returns:
+        bool: True if the check configuration template has the required keys, False otherwise.
+    """
+    # Check if the check configuration template is a list of dictionaries
+    if not isinstance(checkconfig, list):
+        return False
+    # Check if each item in the list is a dictionary
+    if not all(health_check_element_is_a_dictionary(item) for item in checkconfig):
+        return False
+    if not all(isinstance(item, dict) for item in checkconfig):
+        return False
+
+    return isinstance(checkconfig, list) and all(isinstance(item, dict) for item in checkconfig)
+
 def mount_point_template_vertification(mount_point:dict)->bool:
     """ Verify if the mount point dictionary has the required keys.
 
@@ -21,8 +41,20 @@ def mount_point_template_vertification(mount_point:dict)->bool:
     Returns:
         bool: True if the mount point dictionary has the required keys, False otherwise.
     """
+    if not isinstance(mount_point, dict):
+        return False
     # Check if the mount point dictionary has the required keys
-    return all(key in mount_point for key in ['mount_point', 'is_mounted', 'usage_percentage'])
+    if not all(key in mount_point for key in ['synonym','mount_point', 'threshold_percentage']):
+        return False
+    # Check if the threshold percentage is a valid integer between 0 and 100
+    # Check if the mount point is a valid Linux mount point syntax
+    # Check if the synonym is not emp
+    if not is_valid_capacity_threshold(mount_point['threshold_percentage']) \
+        or not is_valid_mount_point(mount_point['mount_point']) \
+            or not is_valid_synonym(mount_point["synonym"]):
+        return False
+    # If all checks pass, the mount point dictionary is valid
+    return True
 
 def webservice_template_verification(webservice:dict)->bool:
     """ Verify if the webservice dictionary has the required keys.
@@ -33,17 +65,19 @@ def webservice_template_verification(webservice:dict)->bool:
     Returns:
         bool: True if the webservice dictionary has the required keys, False otherwise.
     """
-    # Set the default verification result to False
-    verification_results=False
-    # Check if the webservice dictionary has details key
-    if hasattr(webservice,'details'):
-        # Copy details disctionary from webservice
-        details=webservice['details']
-        # Check if the details dictionary has the required keys
-        if all(key in details for key in ['synonym','hostname','port']):
-            pass
-
-    return verification_results
+    # Check if the webservice dictionary has the required keys
+    if not all(key in webservice for key in ['synonym','hostname','port','protocol']):
+        return False
+    # Check if the hostname is a valid hostname or IP address
+    # Check if the port is a valid port number
+    # Check if the protocol is a valid web protocol (http or https)
+    if not is_hostname_ipv4_ipv6(webservice['hostname']) \
+        or not is_valid_port(webservice['port']) \
+            or not is_valid_web_protocol(webservice['protocol']) \
+                or not is_valid_synonym(webservice["synonym"]):
+        return False
+    # If all checks pass, the webservice dictionary is valid
+    return True
 
 def database_template_verification(database:dict)->bool:
     """ Verify if the database dictionary has the required keys.
@@ -55,7 +89,18 @@ def database_template_verification(database:dict)->bool:
         bool: True if the database dictionary has the required keys, False otherwise.
     """
     # Check if the database dictionary has the required keys
-    return all(key in database for key in ['database_name', 'is_available', 'response_time'])
+    if not all(key in database for key in ['synonym','hostname','port','database_type']):
+        return False
+    # Check if the hostname is a valid hostname or IP address
+    # Check if the port is a valid port number
+    # Check if the database type is in the DB_DRIVER_MAP keys
+    # Check if the synonym is valid
+    if not is_hostname_ipv4_ipv6(database['hostname']) \
+        or not is_valid_port(database['port']) \
+            or not is_valid_db_driver(database['database_type']) \
+                or not is_valid_synonym(database["synonym"]):
+        return False
+    return True
 
 def requirements_template_verification(requirements:list[str])->bool:
     """ Verify if the requirements list has the required format.
@@ -66,8 +111,16 @@ def requirements_template_verification(requirements:list[str])->bool:
     Returns:
         bool: True if the requirements list has the required format, False otherwise.
     """
-    # Check if the requirements list is a list of strings
-    return isinstance(requirements, list) and all(isinstance(item, str) for item in requirements)
+    # Check if the requirements dictionary has the required keys
+    if not all(key in requirements for key in ['synonym','requirements_file_path']):
+        return False
+    # Check if the requirements file path is a valid file path
+    # Check if the synonym is valid
+    if not is_valid_file_path(requirements['requirements_file_path']) \
+        or not is_valid_synonym(requirements["synonym"]):
+        return False
+    # If all checks pass, the requirements list is valid    
+    return True
 
 def config_schmema_is_not_empty(config_schema)->bool:
     """ Verify if the config schema is not empty.
@@ -260,3 +313,71 @@ def is_valid_file_path(file_path:str)->bool:
     """
     # Check if the file path is not empty and does not contain any invalid characters
     return bool(file_path) and re.match(r'^[\w\-. /]+$', file_path) and len(file_path) > 0
+
+def is_valid_synonym(synonym:str)->bool:
+    """ Check if the provided synonym is valid.
+
+    Args:
+        synonym (bool): The synonym to check.
+
+    Returns:
+        bool: True if the synonym is a not empty and string value, False otherwise.
+    """
+    # Check if the synonym is not null
+    if not synonym:
+        return False
+    # Check if synonym is not a string
+    if not isinstance(synonym, str):
+        return False
+    # Check if the synonym is not empty
+    if len(synonym) == 0:
+        return False
+    # Return True if the synonym is a string and not empty
+    return True
+
+def is_valid_health_check_type(health_check_type:str)->bool:
+    """ Check if the provided health check type is valid.
+
+    Args:
+        health_check_type (str): The health check type to check.
+
+    Returns:
+        bool: True if the health check type is valid, False otherwise.
+    """
+    # Check if the health check type is not empty and is a string
+    if not health_check_type or not isinstance(health_check_type, str):
+        return False
+    # Check if the health check type is one of the valid types
+    valid_health_check_types = ['mount_point', 'webservice', 'database', 'requirements']
+    if health_check_type.lower() not in valid_health_check_types:
+        return False
+    # If all checks pass, the health
+    return True
+
+def is_valid_health_check_type_element(health_check:dict)->bool:
+    """ Check if the provided health check element is valid.
+
+    Args:
+        health_check_element (dict): The health check element to check.
+
+    Returns:
+        bool: True if the health check type is element, False otherwise.
+    """
+    # Check if the health check is dictionry has the required keys
+    if not all(key in health_check for key in ['check_type', 'details']):
+        return False
+    # Check if the check_type is a valid health check type
+    if not is_valid_health_check_type(health_check['check_type']):
+        return False
+    # Check if health check type and details are valid
+    if health_check['check_type'] == 'mount_point' and not mount_point_template_vertification(health_check['details']):
+        return False
+    if health_check['check_type'] == 'webservice' and not webservice_template_verification(health_check['details']):
+        return False
+    if health_check['check_type'] == 'database' and not database_template_verification(health_check['details']):
+        return False
+    if health_check['check_type'] == 'requirements' and not requirements_template_verification(health_check['details']):
+        return False
+    # If all checks pass return True
+    return True
+    
