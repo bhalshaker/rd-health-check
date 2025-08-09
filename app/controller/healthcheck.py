@@ -380,4 +380,15 @@ def is_valid_health_check_type_element(health_check:dict)->bool:
         return False
     # If all checks pass return True
     return True
-    
+
+def get_database_driver_by_type(database_type:str)->str:
+    """ Get the database driver by type.
+
+    Args:
+        database_type (str): The database type to get the driver for.
+
+    Returns:
+        str: The database driver for the provided database type.
+    """
+    # Return the first driver from the DB_DRIVER_MAP for the provided database type
+    return DB_DRIVER_MAP.get(database_type.lower(), [None])[0] if database_type else None
