@@ -1,12 +1,12 @@
 import os
-from app.schema import MountPointHealthcheckStatus,WebServiceHealthcheckStatus,RequirementsFileHealthcheckStatus
-from app.schema import DatabaseHealthcheckStatus,AllHealthcheckStatus
+from app.schema.healthcheck_status import MountPointHealthcheckStatus,WebServiceHealthcheckStatus,RequirementsFileHealthcheckStatus
+from app.schema.healthcheck_status import DatabaseHealthcheckStatus,AllHealthcheckStatus
 from app.controller.tcp_based_connection import TcpBasedConnection
 from app.controller.external_file_processing import ExternalFileProcessing
 from app.controller.terminal_processing import TerminalProcessing
 from app.controller.healthcheck_foundation import HealthCheckFoundation
-from app.schema import DatabaseHealthcheckConfig,WebserviceHealthcheckConfig,MountPointHealthcheckConfig
-from app.schema import AllHealthcheckConfig,RequirementsFileHealthcheckConfig
+from app.schema.healthcheck_config import DatabaseHealthcheckConfig,WebserviceHealthcheckConfig,MountPointHealthcheckConfig
+from app.schema.healthcheck_config import AllHealthcheckConfig,RequirementsFileHealthcheckConfig
 
 class HealthCheckProcessing:
     """ A class to handle health check processing tasks such as reading configuration files and performing health checks.

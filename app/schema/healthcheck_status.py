@@ -18,7 +18,7 @@ class HealthcheckStatus:
     Class to represent the health check status of a system.
     """
     synonym: str
-    status: HealthcheckStatusEnum = field(default=HealthcheckStatusEnum.FAILURE)
+    status: HealthcheckStatusEnum
 
 @dataclass
 class MountPointHealthcheckStatus(HealthcheckStatus):

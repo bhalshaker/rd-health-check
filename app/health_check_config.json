@@ -1,0 +1,28 @@
+[
+  {
+    "check_type": "database",
+    "details": {
+      "synonym": "Core Database",
+      "hostname": "mozilla.cloudflare-dns.com",
+      "port": 443,
+      "database_type": "mysql"
+    }
+  },
+  {
+    "check_type": "webservice",
+    "details": {
+      "synonym": "example API",
+      "hostname": "google.com",
+      "port": 443,
+      "protocol": "https"
+    }
+  },
+  {
+    "check_type": "mount_point",
+    "details": {
+      "synonym": "Attachments Partition",
+      "mount_point": "/boot",
+      "threshold_percentage": 40
+    }
+  }
+]
