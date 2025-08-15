@@ -277,21 +277,21 @@ class AllHealthcheckConfig:
             match item['check_type']:
                 case 'mount_point':
                     try:
-                        self.mount_points.append(MountPointHealthcheckConfig(**item))
+                        self.mount_points.append(MountPointHealthcheckConfig(**item["details"]))
                     except:
                         pass
                 case 'webservice':
                     try:
-                        self.web_services.append(WebserviceHealthcheckConfig(**item))
+                        self.webservices.append(WebserviceHealthcheckConfig(**item["details"]))
                     except:
                         pass
                 case 'database':
                     try:
-                        self.databases.append(DatabaseHealthcheckConfig(**item))
+                        self.databases.append(DatabaseHealthcheckConfig(**item["details"]))
                     except:
                         pass
                 case 'requirements_file':
                     try:
-                        self.requirements_files.append(RequirementsFileHealthcheckConfig(**item))
+                        self.requirements_files.append(RequirementsFileHealthcheckConfig(**item["details"]))
                     except:
                         pass

@@ -13,7 +13,7 @@ healthcheck_router = APIRouter()
                         description="This endpoint is used to check the health checkpoints of the application.",
                         response_model=AllHealthcheckStatus)
 def healthcheck()-> AllHealthcheckStatus:
-    return HealthCheckProcessing.all_required_packages_health_check()
+    return HealthCheckProcessing.full_health_check()
 
 @healthcheck_router.get(path="/healthcheck/databases",
                         summary="Databases Healthcheck Endpoint",
