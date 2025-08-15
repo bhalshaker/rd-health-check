@@ -3,6 +3,8 @@ from app.depend.authentication import Auth
 from app.controller.healthcheck_processing import HealthCheckProcessing
 from app.schema.healthcheck_status import MountPointHealthcheckStatus,WebServiceHealthcheckStatus, DatabaseHealthcheckStatus
 from app.schema.healthcheck_status import RequirementsFileHealthcheckStatus,AllHealthcheckStatus
+from dataclasses import asdict
+
 
 
 healthcheck_router = APIRouter()
@@ -27,7 +29,8 @@ def healthcheck_databases(is_admin: bool = Depends(Auth.is_admin))-> list[Databa
                         description="This endpoint is used to check the health of mount points defined in the health check configuration.",
                         response_model=list[MountPointHealthcheckStatus])
 def healthcheck_mountpoints(is_admin: bool = Depends(Auth.is_admin))-> list[MountPointHealthcheckStatus]:
-    return HealthCheckProcessing.mount_points_health_check()
+    mount_point_healthcheck_status=HealthCheckProcessing.mount_points_health_check()
+    return mount_point_healthcheck_status
 
 @healthcheck_router.get(path="/healthcheck/webservices",
                         summary="Web Services Healthcheck Endpoint",
