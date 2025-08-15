@@ -115,6 +115,7 @@ class HealthCheckProcessing:
                 synonym=database.synonym,
                 hostname=database.hostname,
                 port=database.port,
+                database_type=database.database_type,
                 can_tcp=can_establish_tcp
             )
         installed_packages= TerminalProcessing.get_installed_packages()
@@ -125,9 +126,9 @@ class HealthCheckProcessing:
             synonym=database.synonym,
             hostname=database.hostname,
             port=database.port,
-            type=database.database_type,
+            database_type=database.database_type,
             can_tcp=can_establish_tcp,
-            is_db_driver_installed=is_db_driver_installed
+            db_driver_installed=is_db_driver_installed
         )
 
     # Databases health check
