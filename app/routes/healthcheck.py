@@ -1,20 +1,37 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
+from depend import Auth
+from controller import HealthCheckProcessing
+from schema import MountPointHealthcheckStatus,WebServiceHealthcheckStatus, DatabaseHealthcheckStatus
+from schema import RequirementsFileHealthcheckStatus,AllHealthcheckStatus
+
 
 healthcheck_router = APIRouter()
 
 
-@healthcheck_router.get("/healthcheck")
-def healthcheck():
-    pass
+@healthcheck_router.get(path="/healthcheck",
+                        summary="Healthcheck Endpoint",
+                        description="This endpoint is used to check the health checkpoints of the application.",
+                        response_model=AllHealthcheckStatus)
+def healthcheck()-> AllHealthcheckStatus:
+    return HealthCheckProcessing.all_required_packages_health_check()
 
-@healthcheck_router.get("/healthcheck/databases")
-def healthcheck_databases():
-    pass
+@healthcheck_router.get(path="/healthcheck/databases",
+                        summary="Databases Healthcheck Endpoint",
+                        description="This endpoint is used to check the health of databases defined in the health check configuration.",
+                        response_model=list[DatabaseHealthcheckStatus])
+def healthcheck_databases(is_admin: bool = Depends(Auth.is_admin))-> list[DatabaseHealthcheckStatus]:
+    return HealthCheckProcessing.databases_health_check()
 
-@healthcheck_router.get("/healthcheck/mountpoints")
-def healthcheck_mountpoints():
-    pass
+@healthcheck_router.get(path="/healthcheck/mountpoints",
+                        summary="Mount Points Healthcheck Endpoint",
+                        description="This endpoint is used to check the health of mount points defined in the health check configuration.",
+                        response_model=list[MountPointHealthcheckStatus])
+def healthcheck_mountpoints(is_admin: bool = Depends(Auth.is_admin))-> list[MountPointHealthcheckStatus]:
+    return HealthCheckProcessing.mount_points_health_check()
 
-@healthcheck_router.get("/healthcheck/webservices")
-def healthcheck_webservices():
-    pass
+@healthcheck_router.get(path="/healthcheck/webservices",
+                        summary="Web Services Healthcheck Endpoint",
+                        description="This endpoint is used to check the health of web services defined in the health check configuration.",
+                        response_model=list[WebServiceHealthcheckStatus])
+def healthcheck_webservices(is_admin: bool = Depends(Auth.is_admin))-> list[WebServiceHealthcheckStatus]:
+    return HealthCheckProcessing.webservices_health_check()

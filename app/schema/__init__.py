@@ -1,1 +1,2 @@
-import health_status as HealthStatus
+from .healthcheck_status import (MountPointHealthcheckStatus, WebServiceHealthcheckStatus, DatabaseHealthcheckStatus)
+from .healthcheck_status import (RequirementsFileHealthcheckStatus,AllHealthcheckStatus)

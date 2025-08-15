@@ -8,10 +8,10 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 ## 🦯 Core Feature Implementation Checklist
 
-- [75%] Implement diagnostic routine to verify TCP connectivity to external endpoints based on hostname or IP address and designated port.
-- [50%] Validate presence of all Python packages specified in the `requirements.txt` manifest.
-- [25%] Conduct availability checks for remote HTTP-based APIs, ensuring availability of the service.
-- [75%] Detect and confirm active mount status of filesystem targets essential to application runtime dependencies.
+- [100%] Implement diagnostic routine to verify TCP connectivity to external endpoints based on hostname or IP address and designated port.
+- [100%] Validate presence of all Python packages specified in the `requirements.txt` manifest.
+- [100%] Conduct availability checks for remote HTTP-based APIs, ensuring availability of the service.
+- [100%] Detect and confirm active mount status of filesystem targets essential to application runtime dependencies.
 
 [📖 Core Features Description](howto/CORE_FEATURES.md "Core Features Description")
 
@@ -44,7 +44,7 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 ## 📋 Run environemnt prerequisites
 
 * 🐍 Python 3.11
-* 🐳 Docker/ 🦭 Podman (Recommended to automate testing, otherwise allocating databases should be done manually)
+* 🐳 Docker/ 🦭 Podman
 
 ## 📦 Libraries Used
 
