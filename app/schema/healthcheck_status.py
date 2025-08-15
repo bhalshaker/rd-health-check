@@ -61,7 +61,7 @@ class DatabaseHealthcheckStatus(HealthcheckStatus):
     """
     hostname: str
     port: int
-    protocol: str
+    database_type:str
     can_tcp: bool
     db_driver_installed: bool = field(default=None)
     
@@ -92,6 +92,6 @@ class AllHealthcheckStatus:
     Class to represent the overall health check status of the system.
     """
     mount_points: list[MountPointHealthcheckStatus] = field(default_factory=list)
-    web_services: list[WebServiceHealthcheckStatus] = field(default_factory=list)
+    webservices: list[WebServiceHealthcheckStatus] = field(default_factory=list)
     databases: list[DatabaseHealthcheckStatus] = field(default_factory=list)
     requirements_files: list[RequirementsFileHealthcheckStatus] = field(default_factory=list)

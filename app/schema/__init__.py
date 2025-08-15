@@ -1,4 +1,4 @@
 from .healthcheck_status import (MountPointHealthcheckStatus, WebServiceHealthcheckStatus, DatabaseHealthcheckStatus)
 from .healthcheck_status import (RequirementsFileHealthcheckStatus,AllHealthcheckStatus)
 from .healthcheck_config import (DatabaseHealthcheckConfig, WebserviceHealthcheckConfig, MountPointHealthcheckConfig)
-from .healthcheck_config import (RequirementsFileHealthcheckConfig)
+from .healthcheck_config import (RequirementsFileHealthcheckConfig,AllHealthcheckConfig)
