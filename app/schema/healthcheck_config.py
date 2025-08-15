@@ -186,6 +186,7 @@ class MountPointHealthcheckConfig(HealthcheckConfigBase):
     mount_point: str
     threshold_percentage: int
 
+    @staticmethod
     def _is_valid_mount_point(mount_point:str)->bool:
         """ Check if the provided mount point has a valid Linux mount point syntax using regular expression.
 
@@ -198,8 +199,9 @@ class MountPointHealthcheckConfig(HealthcheckConfigBase):
         # Regex pattern to match valid Linux mount points (absolute paths like /, /home, /mnt/data)
         mount_point_pattern=r'^/(?:[\w.-]+/?)+'
         # Return 
-        return re.match(mount_point_pattern,mount_point)
+        return re.match(mount_point_pattern, mount_point) is not None
     
+    @staticmethod
     def _is_valid_capacity_threshold(capacity_threshold:int)->bool:
         """ Check if the provided capacity threshold is valid.
 
@@ -234,6 +236,7 @@ class RequirementsFileHealthcheckConfig(HealthcheckConfigBase):
     """
     requirements_file_path: str
 
+    @staticmethod
     def _is_valid_file_path(file_path:str)->bool:
         """ Check if the provided file path is valid.
 
@@ -290,7 +293,7 @@ class AllHealthcheckConfig:
                         self.databases.append(DatabaseHealthcheckConfig(**item["details"]))
                     except Exception as e:
                         print(f"Error while creating database health check: {e}")
-                case 'requirements_file':
+                case 'requirements':
                     try:
                         self.requirements_files.append(RequirementsFileHealthcheckConfig(**item["details"]))
                     except Exception as e:

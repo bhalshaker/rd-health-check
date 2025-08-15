@@ -111,19 +111,6 @@ class HealthCheckFoundation:
 
 
     @staticmethod
-    def driver_package_list(db_driver:str)->list[str]:
-        """ Get the list of packages for the provided database driver.
-
-        Args:
-            db_driver (str): The database driver to get the package list for.
-
-        Returns:
-            list[str]: A list of packages associated with the provided database driver.
-        """
-        # Return the list of packages for the provided database driver
-        return HealthCheckFoundation.DB_DRIVER_MAP.get(db_driver.lower(), [])
-
-    @staticmethod
     def is_valid_health_check_type(health_check_type:str)->bool:
         """ Check if the provided health check type is valid.
 

@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 from os import PathLike
+from app.logging.logging import return_logging_instance
 
 class ExternalFileProcessing:
     """ A class to handle external file processing tasks such as reading configuration files and requirements.
@@ -13,6 +14,7 @@ class ExternalFileProcessing:
         Returns:
             list[str]: A list of installed packages as strings.
         """
+        logger=return_logging_instance("External File Processing")
         # Read the requirements.txt file and return its content as a list of strings
         if not ExternalFileProcessing.file_exists(requirements_file):
             return [] # Return an empty list if the file does not exist
@@ -20,9 +22,15 @@ class ExternalFileProcessing:
             with open(requirements_file, "r") as file:
                 # Exclude empty and commented lines
                 packages_lines = [line.strip() for line in file if line.strip() and not line.startswith("#")]
+                logger.info(f"number of packages {len(packages_lines)} and packages are {packages_lines}")
                 #Grap pakcage names and strip whitespace
-                return [re.split(r"[.*\]|==|>=|<=|~=|!=|>|<|,", package)[0].strip() for package in packages_lines]
-        except (FileNotFoundError, OSError):
+                package_name_pattern=r"^([a-zA-Z0-9_.-]+)(\[[a-zA-Z0-9_,.-]+\])?"
+                #Get Packages
+                packages=[re.match(package_name_pattern, package).group(1) if re.match(package_name_pattern, package) else package for package in packages_lines]
+                logger.info(f"Packages without version {packages}")
+                return packages
+        except Exception as e:
+            logger.error(f"Reading packages failed due to: {e}")
             return [] 
 
     @staticmethod
