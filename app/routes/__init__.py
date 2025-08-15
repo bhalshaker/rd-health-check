@@ -1,1 +1,0 @@
-from healthcheck import healthcheck_router as HealthcheckRouter
