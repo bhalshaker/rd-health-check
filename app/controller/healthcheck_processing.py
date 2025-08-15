@@ -7,7 +7,9 @@ from app.controller.terminal_processing import TerminalProcessing
 from app.controller.healthcheck_foundation import HealthCheckFoundation
 from app.schema.healthcheck_config import DatabaseHealthcheckConfig,WebserviceHealthcheckConfig,MountPointHealthcheckConfig
 from app.schema.healthcheck_config import AllHealthcheckConfig,RequirementsFileHealthcheckConfig
+from app.logging.logging import return_logging_instance
 
+logger=return_logging_instance("HealthCheck Processing")
 class HealthCheckProcessing:
     """ A class to handle health check processing tasks such as reading configuration files and performing health checks.
     """
@@ -22,16 +24,21 @@ class HealthCheckProcessing:
         """
         # Get the path to the health check configuration file from environment variable or use default
         config_file_location = os.getenv('HEALTH_CHECK_CONFIG_FILE', 'health_check_config.json')
+        logger.info(f"Reading config file from {config_file_location}")
         # Check if the file exists
         if not ExternalFileProcessing.file_exists(config_file_location):
+            logger.info("File does not exist at {config_file_location}")
             return []  # Return an empty list if the file does not exist
         # Read the health check configuration file and return its content as a list of dictionaries
         config_file_content = ExternalFileProcessing.load_health_check_json_schema(config_file_location)
+        logger.info(f"Config file content: {config_file_content}")
         # Verify if the config schema is not empty
         if not HealthCheckFoundation.config_schmema_is_not_empty(config_file_content):
+            logger.info("{config_file_location} is Empty")
             return []
         # Vertify all elements in the config schema are valid
         if not all(HealthCheckFoundation.is_valid_health_check_type_element(element) for element in config_file_content):
+            logger.info("One or more of the check elements not valid")
             return []
         return config_file_content  # Return the health check configuration as a list of dictionaries
     
@@ -39,6 +46,7 @@ class HealthCheckProcessing:
     def _get_healthcheck_config():
         healthcheck_config_dict = HealthCheckProcessing._read_healthcheck_config()
         healthcheck_config = AllHealthcheckConfig(healthcheck_config_dict)
+        logger.info(f"healthcheck_config content {healthcheck_config.__dict__}")
         return healthcheck_config
     
     # Webservices health check

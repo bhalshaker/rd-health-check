@@ -1,5 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass, field
+from typing import Optional
 
 class HealthcheckStatusEnum(Enum):
     """
@@ -18,7 +19,6 @@ class HealthcheckStatus:
     Class to represent the health check status of a system.
     """
     synonym: str
-    status: HealthcheckStatusEnum
 
 @dataclass
 class MountPointHealthcheckStatus(HealthcheckStatus):
@@ -30,13 +30,14 @@ class MountPointHealthcheckStatus(HealthcheckStatus):
     current_usage: int
     threshold_percentage: int
 
-    def __post_init__(self):
-        if not self.is_mounted or self.current_usage >= self.threshold_percentage:
-            self.status = HealthcheckStatusEnum.FAILURE
+    @property
+    def status(self):
+        if self.current_usage >= self.threshold_percentage:
+            return HealthcheckStatusEnum.FAILURE.value()
         elif self.current_usage >= (self.threshold_percentage - 5):
-            self.status = HealthcheckStatusEnum.WARNING
+            return HealthcheckStatusEnum.WARNING.value()
         else:
-            self.status = HealthcheckStatusEnum.SUCCESS
+            return HealthcheckStatusEnum.SUCCESS.value()
 
 @dataclass
 class WebServiceHealthcheckStatus(HealthcheckStatus):
@@ -48,11 +49,12 @@ class WebServiceHealthcheckStatus(HealthcheckStatus):
     protocol: str
     can_tcp: bool
 
-    def __post_init__(self):
+    @property
+    def status(self):
         if self.can_tcp:
-            self.status = HealthcheckStatusEnum.SUCCESS
+            return HealthcheckStatusEnum.SUCCESS.value()
         else:
-            self.status = HealthcheckStatusEnum.FAILURE
+            return HealthcheckStatusEnum.FAILURE.value()
 
 @dataclass
 class DatabaseHealthcheckStatus(HealthcheckStatus):
@@ -65,11 +67,12 @@ class DatabaseHealthcheckStatus(HealthcheckStatus):
     can_tcp: bool
     db_driver_installed: bool = field(default=None)
     
-    def __post_init__(self):
+    @property
+    def status(self):
         if self.can_tcp and (self.db_driver_installed is None or self.db_driver_installed):
-            self.status = HealthcheckStatusEnum.SUCCESS
+            self.status = HealthcheckStatusEnum.SUCCESS.value()
         else:
-            self.status = HealthcheckStatusEnum.FAILURE
+            self.status = HealthcheckStatusEnum.FAILURE.value()
 
 @dataclass
 class RequirementsFileHealthcheckStatus(HealthcheckStatus):
@@ -80,11 +83,12 @@ class RequirementsFileHealthcheckStatus(HealthcheckStatus):
     is_file_exists: bool
     are_all_packages_installed: bool=field(default=False)
 
-    def __post_init__(self):
+    @property
+    def status(self):
         if self.is_file_exists and self.are_all_packages_installed:
-            self.status = HealthcheckStatusEnum.SUCCESS
+            self.status = HealthcheckStatusEnum.SUCCESS.value()
         else:
-            self.status = HealthcheckStatusEnum.FAILURE
+            self.status = HealthcheckStatusEnum.FAILURE.value()
 
 @dataclass
 class AllHealthcheckStatus:
