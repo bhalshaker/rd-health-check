@@ -1,10 +1,13 @@
 import socket
+from app.logging.logging import return_logging_instance
 
+logger=return_logging_instance("HealthCheck TCP")    
 class TcpBasedConnection:
     """A class to handle TCP based connections."""
+
     
     @staticmethod
-    def determine_address_family_version(hostname:str)->dict:
+    def determine_address_family_version(hostname:str,port:int)->dict:
         """A function to determince whether IP address version is IPV4 or IPV6.
 
         Args:
@@ -15,11 +18,12 @@ class TcpBasedConnection:
         """
         try:
             # Check the type of IP address whether it is IPV4 or IPV6
-            ip_version=socket.getaddrinfo(hostname)[0][0]
+            ip_version=socket.getaddrinfo(hostname,port)[0][0]
             # Return IP version and announce that IP version detection was successful
             return ip_version
-        except:
+        except Exception as e:
             # Announce that IP version detection was failed
+            logger.error(f"Failed to detect IP address version: {e}")
             return None
     
     @staticmethod
@@ -35,12 +39,12 @@ class TcpBasedConnection:
             bool: True if the TCP connection can be established, False otherwise.
         """
         # Check if the ip address IPV4 or IPV6
-        address_family=TcpBasedConnection.determine_address_family_version(hostname)
+        address_family=TcpBasedConnection.determine_address_family_version(hostname,port)
         # If ip address family could not be detected then TCP connection cannot be established
         if not address_family or address_family not in [socket.AF_INET,socket.AF_INET6]:
             return False
         # Create a socket based in IP version
-        created_socket=socket.socket(address_family['ip_family'],socket.SOCK_STREAM)
+        created_socket=socket.socket(address_family,socket.SOCK_STREAM)
         # Set timeout
         created_socket.settimeout(time_out)
         try:
@@ -48,6 +52,7 @@ class TcpBasedConnection:
             created_socket.connect((hostname,port))
             # Announce that the process is successful and TCP connection can be established
             return True
-        except:
+        except Exception as e:
             # Report that the TCP connection cannot be established
+            logger.error(f"Failed to establish TCP connection to {hostname}:{port} caused by {e}")
             return False

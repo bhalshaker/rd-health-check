@@ -12,7 +12,7 @@
     "check_type": "webservice",
     "details": {
       "synonym": "example API",
-      "hostname": "google.com",
+      "hostname": "example.com",
       "port": 443,
       "protocol": "https"
     }
