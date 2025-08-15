@@ -1,8 +1,8 @@
 from fastapi import APIRouter,Depends
-from depend import Auth
-from controller import HealthCheckProcessing
-from schema import MountPointHealthcheckStatus,WebServiceHealthcheckStatus, DatabaseHealthcheckStatus
-from schema import RequirementsFileHealthcheckStatus,AllHealthcheckStatus
+from app.depend.authentication import Auth
+from app.controller.healthcheck_processing import HealthCheckProcessing
+from app.schema.healthcheck_status import MountPointHealthcheckStatus,WebServiceHealthcheckStatus, DatabaseHealthcheckStatus
+from app.schema.healthcheck_status import RequirementsFileHealthcheckStatus,AllHealthcheckStatus
 
 
 healthcheck_router = APIRouter()

@@ -4,17 +4,6 @@ class HealthCheckFoundation:
     """ A class to handle basic health check tasks such as verifying configuration templates and checking system properties.
     """
     
-    # Map of database drivers to their associated possible packages
-    DB_DRIVER_MAP={
-        "postgresql":["psycopg","psycopg2","psycopg2-binary","asyncpg"],
-        "mysql":["mysqlclient","pymysql","aiomysql","mysql-connector-python"],
-        "sqlite":["sqlite3","aiosqlite"],
-        "oracle":["cx_Oracle","oracledb"],
-        "mssql":["pymssql","pyodbc","mssql-python"], # From Microsoft Documentation
-        "mariadb":["mariadb","pymysql","asyncmy"],
-        "db2":["ibm_db"]
-    }
-
     @staticmethod
     def is_config_template_checktype_valid(checkconfig:list[dict])->bool:
         """ Verify if the check configuration template has the required keys.
