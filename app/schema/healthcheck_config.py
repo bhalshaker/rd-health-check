@@ -250,4 +250,48 @@ class RequirementsFileHealthcheckConfig(HealthcheckConfigBase):
         # Validate requirements file path syntax
         if not self._is_valid_file_path(self.requirements_file_path):
             raise ValueError(f"Invalid requirements file path: {self.requirements_file_path}. It must be a valid file path.")
-        
+@dataclass
+class AllHealthcheckConfig:
+    """
+    Configuration for all health checks.
+    """
+    mount_points: list[MountPointHealthcheckConfig] = field(default_factory=list)
+    webservices: list[WebserviceHealthcheckConfig] = field(default_factory=list)
+    databases: list[DatabaseHealthcheckConfig] = field(default_factory=list)
+    requirements_files: list[RequirementsFileHealthcheckConfig] = field(default_factory=list)
+
+    def __init__(self,healthcheck_config):
+        """
+        Initialize AllHealthcheckConfig with the provided healthcheck_config.
+
+        Args:
+            healthcheck_config (dict): The health check configuration to initialize the object with.
+        """
+        # Initialize empty lists for each type of health check configuration
+        self.mount_points = []
+        self.databases = []
+        self.webservices = []
+        self.requirements_files = []
+        # Iterate through the healthcheck_config and create instances of the respective health check configuration classes
+        for item in healthcheck_config:
+            match item['check_type']:
+                case 'mount_point':
+                    try:
+                        self.mount_points.append(MountPointHealthcheckConfig(**item))
+                    except:
+                        pass
+                case 'webservice':
+                    try:
+                        self.web_services.append(WebserviceHealthcheckConfig(**item))
+                    except:
+                        pass
+                case 'database':
+                    try:
+                        self.databases.append(DatabaseHealthcheckConfig(**item))
+                    except:
+                        pass
+                case 'requirements_file':
+                    try:
+                        self.requirements_files.append(RequirementsFileHealthcheckConfig(**item))
+                    except:
+                        pass
