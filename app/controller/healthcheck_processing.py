@@ -115,19 +115,20 @@ class HealthCheckProcessing:
                 synonym=database.synonym,
                 hostname=database.hostname,
                 port=database.port,
+                database_type=database.database_type,
                 can_tcp=can_establish_tcp
             )
         installed_packages= TerminalProcessing.get_installed_packages()
         # Check if the database driver is installed
-        is_db_driver_installed = any(driver in installed_packages for driver in database.database_drivers) and len(installed_packages) > 0
+        is_db_driver_installed = any(package in installed_packages for package in database.database_drivers) and len(installed_packages) > 0
         # Return the health check result as a DatabaseHealthcheckStatus object
         return DatabaseHealthcheckStatus(
             synonym=database.synonym,
             hostname=database.hostname,
             port=database.port,
-            type=database.database_type,
+            database_type=database.database_type,
             can_tcp=can_establish_tcp,
-            is_db_driver_installed=is_db_driver_installed
+            db_driver_installed=is_db_driver_installed
         )
 
     # Databases health check
@@ -223,8 +224,10 @@ class HealthCheckProcessing:
             )
         # Get the list of installed packages
         installed_packages = TerminalProcessing.get_installed_packages()
+        def normalize_package(package:str):
+            return package.replace('-','_').lower()
         # Check if all required packages are installed
-        are_all_packages_installed = all(pkg in installed_packages for pkg in required_packages)
+        are_all_packages_installed = all(pkg or normalize_package(pkg) in installed_packages for pkg in required_packages)
         # Return the health check result as a RequirementsFileHealthcheckStatus object
         return RequirementsFileHealthcheckStatus(
             synonym=requirements.synonym,

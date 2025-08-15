@@ -22,7 +22,14 @@
     "details": {
       "synonym": "Attachments Partition",
       "mount_point": "/boot",
-      "threshold_percentage": 40
+      "threshold_percentage": 45
+    }
+  },
+  {
+    "check_type":"requirements",
+    "details":{
+      "synonym":"Requirements Files",
+      "requirements_file_path":"requirements.txt"
     }
   }
 ]

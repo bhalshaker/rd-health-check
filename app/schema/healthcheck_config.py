@@ -136,18 +136,18 @@ class DatabaseHealthcheckConfig(HealthcheckConfigBase):
     }
 
 
-    def _is_valid_db_driver(self, database_type:str)->bool:
-        """ Check if the provided database driver is valid.
+    def _is_valid_db(self, database_type:str)->bool:
+        """ Check if the provided database is valid.
 
         Args:
-            db_driver (str): The database driver to check.
+            db_driver (str): The database to check.
 
         Returns:
             bool: True if the database driver is valid, False otherwise.
         """
 
         # Check if the database driver is in the DB_DRIVER_MAP values
-        return any(database_type.lower() in drivers for drivers in self._DB_DRIVER_MAP.values())
+        return database_type.lower() in list(self._DB_DRIVER_MAP.keys())
 
     def _get_database_drivers_by_type(self,database_type:str)->list:
         """ Get the database drivers by type.
@@ -176,7 +176,7 @@ class DatabaseHealthcheckConfig(HealthcheckConfigBase):
         if not self._is_valid_port(self.port):
             raise ValueError(f"Invalid port number: {self.port}")
         # Validate database type
-        if not self._is_valid_db_driver(self.database_type):
+        if not self._is_valid_db(self.database_type):
             raise ValueError(f"Invalid database type: {self.database_type}. Supported types are: {list(self._DB_DRIVER_MAP.keys())}")
 @dataclass
 class MountPointHealthcheckConfig(HealthcheckConfigBase):
@@ -186,6 +186,7 @@ class MountPointHealthcheckConfig(HealthcheckConfigBase):
     mount_point: str
     threshold_percentage: int
 
+    @staticmethod
     def _is_valid_mount_point(mount_point:str)->bool:
         """ Check if the provided mount point has a valid Linux mount point syntax using regular expression.
 
@@ -198,8 +199,9 @@ class MountPointHealthcheckConfig(HealthcheckConfigBase):
         # Regex pattern to match valid Linux mount points (absolute paths like /, /home, /mnt/data)
         mount_point_pattern=r'^/(?:[\w.-]+/?)+'
         # Return 
-        return re.match(mount_point_pattern,mount_point)
+        return re.match(mount_point_pattern, mount_point) is not None
     
+    @staticmethod
     def _is_valid_capacity_threshold(capacity_threshold:int)->bool:
         """ Check if the provided capacity threshold is valid.
 
@@ -234,6 +236,7 @@ class RequirementsFileHealthcheckConfig(HealthcheckConfigBase):
     """
     requirements_file_path: str
 
+    @staticmethod
     def _is_valid_file_path(file_path:str)->bool:
         """ Check if the provided file path is valid.
 
@@ -278,20 +281,20 @@ class AllHealthcheckConfig:
                 case 'mount_point':
                     try:
                         self.mount_points.append(MountPointHealthcheckConfig(**item["details"]))
-                    except:
-                        pass
+                    except Exception as e:
+                        print(f"Error while creating mount point health check: {e}")
                 case 'webservice':
                     try:
                         self.webservices.append(WebserviceHealthcheckConfig(**item["details"]))
-                    except:
-                        pass
+                    except Exception as e:
+                        print(f"Error while creating webservice health check: {e}")
                 case 'database':
                     try:
                         self.databases.append(DatabaseHealthcheckConfig(**item["details"]))
-                    except:
-                        pass
-                case 'requirements_file':
+                    except Exception as e:
+                        print(f"Error while creating database health check: {e}")
+                case 'requirements':
                     try:
                         self.requirements_files.append(RequirementsFileHealthcheckConfig(**item["details"]))
-                    except:
-                        pass
+                    except Exception as e:
+                        print(f"Error while creating requirements file health check: {e}")

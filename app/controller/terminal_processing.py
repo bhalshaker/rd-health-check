@@ -1,5 +1,6 @@
 import subprocess
 import os
+from app.logging.logging import return_logging_instance
 
 class TerminalProcessing:
     """
@@ -16,6 +17,8 @@ class TerminalProcessing:
             str: The output of the command as a UTF-8 decoded string.
         """
         # Send the command to the terminal and return caputre the output as a UTF-8 decoded string
+        logger=return_logging_instance("Terminal Processing")
+        logger.info(f"Executing command: {command}")
         output= subprocess.check_output(command)
         return output.decode('UTF-8')
     
@@ -39,13 +42,16 @@ class TerminalProcessing:
         Returns:
             int: The usage percentage of the specified mount point as an integer.
         """
-        # AWK script: on the second line of input, remove the '%' character and print the numeric value
-        awk_parameter='\'NR==2 { gsub(/%/, ""); print }\'}\''
-        # df --output=pcent {mount_point} | awk 'NR==2 { gsub(/%/, ""); print }'}'
-        terminal_command=['df',mount_point,'|','awk',awk_parameter]
+        # Execute the 'df' command in the terminal and capture its output
+        terminal_command=['df',mount_point]
         output=TerminalProcessing.return_terminal_cmd_output(terminal_command)
+        # Extract the usage percentage from the output
+        lines=output.splitlines()
+        data=lines[1].split()
+        # Extract the usage percentage from the data list
+        usage_percentage=int(data[4].strip('%'))
         # Convert the output to an integer and return it
-        return int(output.strip())
+        return usage_percentage
 
     @staticmethod
     def get_installed_packages()->list[str]:
@@ -54,6 +60,7 @@ class TerminalProcessing:
         Returns:
             list[str]: _description_
         """
+        logger=return_logging_instance("Terminal Processing")
         # 'pip freeze' command in the terminal and capture its output
         command=['pip','freeze']
         try:
@@ -63,6 +70,7 @@ class TerminalProcessing:
             # Extract only the package names by splitting each line at '=='
             # and stripping any extra whitespace
             packages_name=[package.split('==')[0].strip() for package in packages if package]
+            logger.info(f"Cleaned installed packages: {packages_name}")
             # Return the list of package names
             return packages_name
         except subprocess.CalledProcessError:
