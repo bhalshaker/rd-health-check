@@ -1,11 +1,11 @@
 import os
 
-from .healthcheck_foundation import (config_schmema_is_not_empty,is_valid_health_check_type_element)
-from .healthcheck_foundation import (is_file_system_mounted)
 from schema import MountPointHealthcheckStatus,WebServiceHealthcheckStatus,RequirementsFileHealthcheckStatus,DatabaseHealthcheckStatus
 from .tcp_based_connection import TcpBasedConnection
 from .external_file_processing import ExternalFileProcessing
 from .terminal_processing import TerminalProcessing
+from .healthcheck_foundation import HealthCheckFoundation
+from schema import DatabaseHealthcheckConfig
 
 class HealthCheckProcessing:
     """ A class to handle health check processing tasks such as reading configuration files and performing health checks.
@@ -26,10 +26,10 @@ class HealthCheckProcessing:
         # Read the health check configuration file and return its content as a list of dictionaries
         config_file_content = ExternalFileProcessing.load_health_check_json_schema(config_file_location)
         # Verify if the config schema is not empty
-        if not config_schmema_is_not_empty(config_file_content):
+        if not HealthCheckFoundation.config_schmema_is_not_empty(config_file_content):
             return []
         # Vertify all elements in the config schema are valid
-        if not all(is_valid_health_check_type_element(element) for element in config_file_content):
+        if not all(HealthCheckFoundation.is_valid_health_check_type_element(element) for element in config_file_content):
             return []
         return config_file_content  # Return the health check configuration as a list of dictionaries
 
@@ -92,37 +92,36 @@ class HealthCheckProcessing:
         return [HealthCheckProcessing.webservice_health_check(webservice) for webservice in webservices]
 
     # Database health check
-    def database_health_check(database:dict) -> DatabaseHealthcheckStatus:
+    def database_health_check(database:DatabaseHealthcheckConfig) -> DatabaseHealthcheckStatus:
         """
         Perform a health check on a single database.
         
         Args:
-            database (dict): The database configuration.
+            database DatabaseHealthcheckConfig: The database configuration.
             
         Returns:
             DatabaseHealthcheckStatus: The result of the database health check.
         """
         can_establish_tcp = TcpBasedConnection.establish_tcp_connection(
-            database['hostname'],
-            database['port']
+            database.hostname,
+            database.port
         )
         if not can_establish_tcp:
             return DatabaseHealthcheckStatus(
-                synonym=database['synonym'],
-                hostname=database['hostname'],
-                port=database['port'],
+                synonym=database.synonym,
+                hostname=database.hostname,
+                port=database.port,
                 can_tcp=can_establish_tcp
             )
         installed_packages= TerminalProcessing.get_installed_packages()
-        possible_db_drivers = HealthCheckProcessing.get_database_driver_by_type(database['type'])
         # Check if the database driver is installed
-        is_db_driver_installed = any(driver in installed_packages for driver in possible_db_drivers) and len(installed_packages) > 0
+        is_db_driver_installed = any(driver in installed_packages for driver in database.database_drivers) and len(installed_packages) > 0
         # Return the health check result as a DatabaseHealthcheckStatus object
         return DatabaseHealthcheckStatus(
-            synonym=database['synonym'],
-            hostname=database['hostname'],
-            port=database['port'],
-            type=database['type'],
+            synonym=database.synonym,
+            hostname=database.hostname,
+            port=database.port,
+            type=database.database_type,
             can_tcp=can_establish_tcp,
             is_db_driver_installed=is_db_driver_installed
         )
