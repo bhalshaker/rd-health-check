@@ -197,7 +197,7 @@ class MountPointHealthcheckConfig(HealthcheckConfigBase):
             bool: True if the mount point is valid, False otherwise.
         """
         # Regex pattern to match valid Linux mount points (absolute paths like /, /home, /mnt/data)
-        mount_point_pattern=r'^/(?:[\w.-]+/?)+'
+        mount_point_pattern = r'^/([\w.-]+/?)*$'
         # Return 
         return re.match(mount_point_pattern, mount_point) is not None
     
