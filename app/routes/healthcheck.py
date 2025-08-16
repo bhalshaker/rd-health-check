@@ -38,3 +38,10 @@ def healthcheck_mountpoints(is_admin: bool = Depends(Auth.is_admin))-> list[Moun
                         response_model=list[WebServiceHealthcheckStatus])
 def healthcheck_webservices(is_admin: bool = Depends(Auth.is_admin))-> list[WebServiceHealthcheckStatus]:
     return HealthCheckProcessing.webservices_health_check()
+
+@healthcheck_router.get(path="/healthcheck/requirements",
+                        summary="Requirement files Healthcheck Endpoint",
+                        description="This endpoint is used to check the health of requirements files defined in the health check configuration.",
+                        response_model=list[RequirementsFileHealthcheckStatus])
+def healthcheck_requirements(is_admin: bool = Depends(Auth.is_admin))-> list[RequirementsFileHealthcheckStatus]:
+    return HealthCheckProcessing.all_required_packages_health_check()

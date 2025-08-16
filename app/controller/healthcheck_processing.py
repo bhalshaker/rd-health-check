@@ -227,7 +227,7 @@ class HealthCheckProcessing:
         def normalize_package(package:str):
             return package.replace('-','_').lower()
         # Check if all required packages are installed
-        are_all_packages_installed = all(pkg or normalize_package(pkg) in installed_packages for pkg in required_packages)
+        are_all_packages_installed = all(pkg.lower() or normalize_package(pkg) in installed_packages for pkg in required_packages)
         # Return the health check result as a RequirementsFileHealthcheckStatus object
         return RequirementsFileHealthcheckStatus(
             synonym=requirements.synonym,
