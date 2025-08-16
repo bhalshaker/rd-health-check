@@ -21,7 +21,7 @@ class ExternalFileProcessing:
         try:
             with open(requirements_file, "r") as file:
                 # Exclude empty and commented lines
-                packages_lines = [line.strip() for line in file if line.strip() and not line.startswith("#")]
+                packages_lines = [line.strip() for line in file if line.strip() and not line.strip().startswith("#")]
                 logger.info(f"number of packages {len(packages_lines)} and packages are {packages_lines}")
                 #Grap pakcage names and strip whitespace
                 package_name_pattern=r"^([a-zA-Z0-9_.-]+)(\[[a-zA-Z0-9_,.-]+\])?"
