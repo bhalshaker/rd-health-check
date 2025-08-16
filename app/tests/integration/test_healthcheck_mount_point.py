@@ -54,8 +54,8 @@ def test_successful_mount_points_healthcheck(mock_load_health_check_json_schema,
     # As healthcheck config contains 2 mount_points the response should include 2 statuses
     assert len(mount_points_status)==2
     # Make sure that all responses are mount points healthcheck status schema
-    webservice_healthcheck_status_keys={'synonym', 'status', 'mount_point', 'is_mounted', 'current_usage', 'threshold_percentage'}
-    assert all(webservice_healthcheck_status_keys.difference(set(item.keys())) ==set() for item in mount_points_status)
+    mount_points_healthcheck_status_keys={'synonym', 'status', 'mount_point', 'is_mounted', 'current_usage', 'threshold_percentage'}
+    assert all(mount_points_healthcheck_status_keys.difference(set(item.keys())) ==set() for item in mount_points_status)
 
 def test_failed_public_access_to_mountpoints_healthcheck(mock_load_health_check_json_schema):
     # Call /healthcheck/mountpoints without password
