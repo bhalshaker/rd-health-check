@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Healthcheck Dashboard Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>-->
+</head>
+<body>
+    <br>
+    <div id="main-region" class="container">
+        <div class="p-3 mb-2 bg-light">
+            <h4>🪧 Healthcheck Dashboard Demo</h4>
+            <br>
+            <form class="row g-3">
+                <div class="col-12">
+                    <label for="select-healthcheck" class="form-label">Healthcheck Options Dropdown list</label>
+                    <select id="select-healthcheck" class="form-select" aria-label="Healthcheck Options Dropdown list">
+                        <option selected>-- Select --</option>
+                        <option value="all">All Healthchecks</option>
+                        <option value="databases">Databases</option>
+                        <option value="webservices">Webservices</option>
+                        <option value="mount_points">Mount Points</option>
+                        <option value="requirements_files">Requirement Files</option>
+                    </select>
+                </div>
+                <div class="d-grid gap-2 d-md-block">
+                    <button id="display-healthcheck-btn" class="btn btn-primary btn-sm">Display Healthcheck</button>
+                    <button id="reset-selection-btn" class="btn btn-secondary  btn-sm">Reset Selection</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="databases-container" class="container mb-1">
+        <div id="databases-card" class="card">
+            <div id="databases-card-header" class="card-header">Databases</div>
+            <div id="databases-card-body" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div id="webservices-container" class="container mb-1">
+        <div id="webservices-card" class="card">
+            <div id="webservices-card-header" class="card-header">Webservices</div>
+            <div id="webservices-card-body" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div id="mount-points-container" class="container mb-1">
+        <div id="mount-points-card" class="card">
+            <div id="mount-points-card-header" class="card-header">Mount Points</div>
+            <div id="mount-points-card-body" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div id="requirement-files-container" class="container mb-1">
+        <div id="requirement-files-card" class="card">
+            <div id="requirement-files-card-header" class="card-header">Requirement Files</div>
+            <div id="requirement-files-card-body" class="card-body">
+            </div>
+        </div>
+    </div>
+    <script>
+        const healthCheckDropdown = document.getElementById("select-healthcheck");
+        const displayHealthcheckButton=document.getElementById("display-healthcheck-btn");
+        const resetSelectionButton=document.getElementById("reset-selection-btn");
+
+        // Clear main region cards
+        function clearMainRegionsCards(){
+           ["requirement-files-card-body","mount-points-card-body","webservices-card-body","databases-card-body"].forEach(id=>{
+            document.getElementById(id).innerHTML="";
+           }) 
+        }
+
+        //Populate Cards within regions
+        function cardsPopulation(mainRegionCardId,healthchecks){
+            const cardBody=document.getElementById(mainRegionCardId);
+            const rowsDiv=document.createElement("div")
+            rowsDiv.className="row";
+            healthchecks.forEach(healthcheck=>{
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-sm-6';
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                const cardBodyDiv = document.createElement('div');
+                cardBodyDiv.className = 'card-body';
+                const cardTitle = document.createElement('h5');
+                cardTitle.className = 'card-title';
+                cardTitle.textContent = healthcheck.synonym;
+                const cardText = document.createElement('p');
+                cardText.className = 'card-text';
+                cardText.textContent = healthcheck.status;
+                cardBodyDiv.appendChild(cardTitle);
+                cardBodyDiv.appendChild(cardText);
+                cardDiv.appendChild(cardBodyDiv);
+                colDiv.appendChild(cardDiv);
+                rowsDiv.appendChild(colDiv)
+            })
+            cardBody.appendChild(rowsDiv);
+        }
+        // Reset Selection button click even listener
+        resetSelectionButton.addEventListener("click",()=>{
+            healthCheckDropdown.value="";
+            clearMainRegionsCards();
+        })
+        // Display healthcheck button clock event listener
+        displayHealthcheckButton.addEventListener("click", async () => {
+        event.preventDefault();
+        const selection = healthCheckDropdown.value;
+        console.log(selection)
+        clearMainRegionsCards();
+
+        if (!selection) return;
+        try {
+            const response = await fetch("http://localhost:8000/healthcheck");
+            const data = await response.json();
+            console.log(data)
+            switch(selection){
+                case "all":
+                    cardsPopulation("mount-points-card-body", data.mount_points || []);
+                    cardsPopulation("databases-card-body", data.databases || []);
+                    cardsPopulation("requirement-files-card-body", data.requirements_files || []);
+                    cardsPopulation("webservices-card-body", data.webservices || []);
+                    break;
+                case "databases":
+                    cardsPopulation("databases-card-body", data.databases || []);
+                    break;
+                case "webservices":
+                    cardsPopulation("webservices-card-body", data.webservices || []);
+                    break;
+                case "mount_points":
+                    cardsPopulation("mount-points-card-body", data.mount_points || []);
+                    break;
+                case "requirements_files":
+                    cardsPopulation("requirement-files-card-body", data.requirements_files || []);
+            }
+        } catch (err) {
+            console.error("Error Occured:", err);
+        }
+        });
+    </script>
+</body>
+</html>
