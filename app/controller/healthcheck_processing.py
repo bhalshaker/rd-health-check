@@ -167,9 +167,18 @@ class HealthCheckProcessing:
         """
         # check if the mount point is mounted by the system
         is_mount_point_mounted=HealthCheckFoundation.is_file_system_mounted(mount_point.mount_point)
+        # if mount point is not mounted return health check status as failed
+        if not is_mount_point_mounted:
+            return MountPointHealthcheckStatus(
+                synonym=mount_point.synonym,
+                mount_point=mount_point.mount_point,
+                is_mounted=is_mount_point_mounted,
+                current_usage=0,
+                threshold_percentage=mount_point.threshold_percentage
+            )
         # Get the usage percentage of the mount point
         usage_percentage = TerminalProcessing.get_mount_point_usages(mount_point.mount_point) if is_mount_point_mounted else None
-        # Return the health check result as a dictionary
+        # Return the health check result
         return  MountPointHealthcheckStatus(
             synonym=mount_point.synonym,
             mount_point=mount_point.mount_point,
@@ -177,7 +186,6 @@ class HealthCheckProcessing:
             current_usage=usage_percentage,
             threshold_percentage=mount_point.threshold_percentage
         )
-    
 
     # Mount points health check
     @staticmethod

@@ -33,7 +33,9 @@ class MountPointHealthcheckStatus(HealthcheckStatus):
     threshold_percentage: int
 
     def __post_init__(self):
-        if self.current_usage >= self.threshold_percentage:
+        if not(self.is_mounted):
+            self.status=HealthcheckStatusEnum.FAILURE.value
+        elif self.current_usage >= self.threshold_percentage:
             self.status=HealthcheckStatusEnum.FAILURE.value
         elif self.current_usage >= (self.threshold_percentage - 5):
             self.status=HealthcheckStatusEnum.WARNING.value
