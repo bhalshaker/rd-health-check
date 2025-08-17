@@ -12,7 +12,8 @@ environment=os.getenv("ENVIRONMENT_TYPE",'')
 options=Options()
 # if environment type is container then run chrome in headless mode
 if environment.lower()=='container':
-    options.headless = True
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
 
 
 def test_page_at_start_has_empty_regions():
