@@ -53,7 +53,7 @@ Dashboard screenshoot
 
 * 🐍 Python 3.13
 * 🐳 Docker/ 🦭 Podman
-* Internet connection
+* 🌐 Internet connection
 
 ## 📦 Libraries Used
 
