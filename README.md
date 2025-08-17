@@ -21,11 +21,11 @@ The concept will be demonstrated using FastAPI—a modern, high-performance web 
 
 | HTTP Method | Endpoint         | Description                       | Who Can Access? | 
 |-------------|------------------|-----------------------------------|------------------|
-| GET         | /health        | Returns overall health status of the health checks with a details list of each category       | Public  |
-| GET         | /health/databases        | Returns overall health status of databases checklist a details list of each database       | Admin User  |
-| GET         | /health/mountpoints        | Returns overall health status of the mount points health checks with a details list of each mount point       | Admin User   |
-| GET         | /health/webservices        | Returns overall health status of the health checks of registered webservice api with a details list of each webservice       | Admin User   |
-| GET         | /health/requirements        | Returns overall health status of the health checks of requirements files      | Admin User   |
+| GET         | /healthcheck     | Returns overall health status of the health checks with a details list of each category       | Public  |
+| GET         | /healthcheck/databases        | Returns overall health status of databases checklist a details list of each database       | Admin User  |
+| GET         | /healthcheck/mountpoints       | Returns overall health status of the mount points health checks with a details list of each mount point       | Admin User   |
+| GET         | /healthcheck/webservices        | Returns overall health status of the health checks of registered webservice api with a details list of each webservice       | Admin User   |
+| GET         | /healthcheck/requirements        | Returns overall health status of the health checks of requirements files      | Admin User   |
 
 ### 🌐 HTML Demo
 
@@ -53,7 +53,7 @@ Dashboard screenshoot
 
 * 🐍 Python 3.13
 * 🐳 Docker/ 🦭 Podman
-* Internet connection
+* 🌐 Internet connection
 
 ## 📦 Libraries Used
 
