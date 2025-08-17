@@ -6,6 +6,19 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     git \
     curl \
+    libnss3 \
+    libx11-dev \
+    libxcomposite1 \
+    libxrandr2 \
+    libxi6 \
+    libxcursor1 \
+    libxdamage1 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libdrm2 \
+    libgbm1 \
+    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a user and group called uvicorn with UID and GID 1201
