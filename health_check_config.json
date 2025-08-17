@@ -20,8 +20,8 @@
   {
     "check_type": "mount_point",
     "details": {
-      "synonym": "Attachments Partition",
-      "mount_point": "/boot",
+      "synonym": "Root partition",
+      "mount_point": "/",
       "threshold_percentage": 45
     }
   },
