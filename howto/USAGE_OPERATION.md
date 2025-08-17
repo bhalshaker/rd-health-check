@@ -75,31 +75,27 @@ curl -X GET http://localhost:8000/healthcheck \
 
 ### 2. **Run Specific Checks**
 
-| Check Type | Endpoint | Command |
-|------------|----------|---------|
-| Databases | `/healthcheck/databases` |  
+#### Databases
 ```bash
 curl -X GET http://localhost:8000/healthcheck/databases \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer rd-healthcheck'
 ```  
-| Webservices | `/healthcheck/webservices` |  
+#### Webservices
 ```bash
 curl -X GET http://localhost:8000/healthcheck/webservices \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer rd-healthcheck'
 ```  
-| Mount Points | `/healthcheck/mountpoints` |  
+#### Mount Points
 ```bash
 curl -X GET http://localhost:8000/healthcheck/mountpoints \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer rd-healthcheck'
 ```  
-| Requirements | `/healthcheck/requirements` |  
+#### Requirements
 ```bash
 curl -X GET http://localhost:8000/healthcheck/requirements \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer rd-healthcheck'
 ```  
-
----
