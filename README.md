@@ -44,7 +44,7 @@ Dashboard screenshoot
 
 ## 🚀 Deployment and Usage Procedures
 
-[📦 Deploy the application on a container engine (e.g., Docker, Podman) and conduct testing](howto/BAREMETAL.md "Deploy the application on a container engine (e.g., Docker, Podman) and conduct testing")
+[📦 Deploy the application on a container engine (e.g., Docker, Podman) and conduct testing](howto/CONTAINER.md "Deploy the application on a container engine (e.g., Docker, Podman) and conduct testing")
 
 [📘 Follow the documented procedures for application usage and operation](howto/USAGE_OPERATION.md "Follow the documented procedures for application usage and operation")
 
